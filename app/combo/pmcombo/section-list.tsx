@@ -1,14 +1,19 @@
 // app/combo/pmcombo/section-list.tsx
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, Image, TouchableOpacity,
-  StatusBar, ScrollView,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import UnlockPopup from '../../../components/ui/UnlockPopup';
 import Colors from '../../../constants/colors';
 import { PMCOMBO_SECTION_SUBJECTS } from '../../../data/mock/pmcombo.mock';
-import UnlockPopup from '../../../components/ui/UnlockPopup';
 
 const C = Colors;
 const DETAIL_ROUTE = '/combo/pmcombo/course-detail';
@@ -54,7 +59,10 @@ export default function PmComboSectionListScreen() {
               <View style={s.cardBody}>
                 <View style={s.cardTopRow}>
                   <Text style={s.cardTitle}>{item.title}</Text>
-                  <Text style={s.bookmarkIcon}>🔖</Text>
+                  <Image
+  source={require('../../../assets/images/Component15.png')}
+  style={s.bookmarkIcon}
+/>
                 </View>
                 <View style={s.tagRow}>
                   {item.tags.map((tag, i) => (
@@ -108,7 +116,12 @@ const s = StyleSheet.create({
   cardBody:    { padding: 12 },
   cardTopRow:  { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 },
   cardTitle:   { fontSize: 15, fontWeight: '700', color: C.textDark, flex: 1, marginRight: 8 },
-  bookmarkIcon:{ fontSize: 18 },
+  bookmarkIcon: {
+  width: 24,
+  height: 24,
+  marginLeft: 8,
+  resizeMode: 'contain',
+},
   tagRow:      { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   tag:         { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 20 },
   tagOrange:   { backgroundColor: '#FFF3E0' },

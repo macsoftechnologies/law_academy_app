@@ -1,15 +1,21 @@
 
 
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Image, TextInput, StatusBar, Modal,
+    Image,
+    Modal,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import ScreenWrapper from '../../components/ScreenWrapper';
 import Colors from '../../constants/colors';
 import { MOCK_LECTURES } from '../../data/mock/jcj.mock';
-import ScreenWrapper from '../../components/ScreenWrapper';
 // ─── Unlock Full Access modal (Image 10) ─────────────────────────────────────
 function UnlockModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   return (
@@ -40,6 +46,7 @@ function UnlockModal({ visible, onClose }: { visible: boolean; onClose: () => vo
 function LectureRow({
   item, onPress,
 }: { item: typeof MOCK_LECTURES[0]; onPress: () => void }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   return (
     <TouchableOpacity style={s.lectureRow} onPress={onPress} activeOpacity={0.8}>
       {/* Thumbnail */}
@@ -54,7 +61,12 @@ function LectureRow({
 
       {/* Right side: bookmark + buy now if locked */}
       <View style={s.lectureRight}>
-        <Text style={s.bookmarkIcon}>🔖</Text>
+        <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+          <Image
+            source={require('../../assets/images/Component15.png')}
+            style={[s.bookmarkIcon, isBookmarked && { tintColor: Colors.primary }]}
+          />
+        </TouchableOpacity>
         {item.locked && (
           <TouchableOpacity style={s.buyNowSmall} onPress={onPress}>
             <Text style={s.buyNowSmallTxt}>Buy Now</Text>
@@ -167,7 +179,7 @@ const s = StyleSheet.create({
   lectureTitle:{ fontSize: 13, fontWeight: '700', color: Colors.textDark, lineHeight: 18, marginBottom: 4 },
   lectureBy:   { fontSize: 11, color: Colors.textMuted },
   lectureRight:{ padding: 10, alignItems: 'flex-end', justifyContent: 'space-between' },
-  bookmarkIcon:{ fontSize: 16 },
+  bookmarkIcon:{ width: 20, height: 20, resizeMode: 'contain' },
   buyNowSmall: {
     backgroundColor: Colors.primary, paddingHorizontal: 10,
     paddingVertical: 6, borderRadius: 6,

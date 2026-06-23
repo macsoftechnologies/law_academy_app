@@ -5,6 +5,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
+  Image,
   Modal,
   ScrollView,
   StatusBar,
@@ -19,8 +20,6 @@ import { TEST_SUBJECTS } from '../../../data/mock/mains.mock';
 
 const C = Colors;
 
-const BLURRED_TEXT =
-  '(b) The "participatory model" which emphasizes a constructive participation of the community in the mainstreaming of the strong premises and the mainstreaming of legal information in their lives.\n\nPrinciples under the Juvenile Justice (Care and Protection of Children) Act 2015:\nThe Act has dedicated one chapter to Principles, thus emphasizing the significance of reading the Act in the light of the principles while implementing the same.\n\n1 Principles of presumption of innocence:\nAny child shall be presumed to be an innocent of any man-like criminal actions up to the age of eighteen years. The three principles of criminal jurisprudence in India are:\n\na) The same law differently as the presumption to prove by case beyond reasonable doubt.\nb) That a criminal act the accused must be presumed to be innocent unless proved guilty; and\nc) That the onus of the prosecution shifts.\n\nArticle 11 of the Universal Declaration of Human Rights (UNDHR) states, "Everyone charged with a penal offence has the right to be presumed innocent until proved guilty according to law in a public trial at which he has had all the guarantees necessary for his defence."\n\n2 Principle of dignity and worth: All human beings shall be treated with equal dignity and rights.';
 
 export default function TestListScreen() {
   const { subject = 'Mains Test-1', subjectId = 'test1' } =
@@ -81,10 +80,11 @@ export default function TestListScreen() {
           <View key={item.id} style={s.card}>
             {/* Blurred paper preview */}
             <View style={s.preview}>
-              <Text style={s.previewText} numberOfLines={20}>
-                {BLURRED_TEXT}
-              </Text>
-            </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+</View>
 
             {/* Right info */}
             <View style={s.info}>
@@ -218,18 +218,16 @@ const s = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
   },
 
-  preview: {
-    width: 110,
-    backgroundColor: '#f5f5f5',
-    padding: 7,
-    overflow: 'hidden',
-  },
-  previewText: {
-    fontSize: 7,
-    color: '#666',
-    lineHeight: 10,
-    opacity: 0.8,
-  },
+ preview: {
+  width: 110,
+  overflow: 'hidden',
+},
+
+previewImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
 
   info: {
     flex: 1,

@@ -1,18 +1,25 @@
 
 
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, TouchableOpacity,
-  Image, TextInput, StatusBar,
+    FlatList,
+    Image,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import Colors from '../../constants/colors';
 import { MOCK_GUEST_LECTURES } from '../../data/mock/guest.mock';
 
 type Lecture = typeof MOCK_GUEST_LECTURES[0];
 
 function LectureRow({ item }: { item: Lecture }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const handleView = () => {
     router.push({
       pathname: '/guest-lecturer/detail',
@@ -45,8 +52,14 @@ function LectureRow({ item }: { item: Lecture }) {
       </View>
 
       {/* Bookmark */}
-      <TouchableOpacity style={s.bookmarkBtn}>
-        <Text style={s.bookmarkIcon}>🔖</Text>
+      <TouchableOpacity 
+        style={s.bookmarkBtn} 
+        onPress={() => setIsBookmarked(!isBookmarked)}
+      >
+        <Image
+          source={require('../../assets/images/Component15.png')}
+          style={[s.bookmarkIcon, isBookmarked && { tintColor: Colors.primary }]}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -174,5 +187,5 @@ const s = StyleSheet.create({
 
   // Bookmark
   bookmarkBtn: { padding: 10, justifyContent: 'flex-start' },
-  bookmarkIcon:{ fontSize: 16 },
+  bookmarkIcon:{ width: 20, height: 20, resizeMode: 'contain' },
 });

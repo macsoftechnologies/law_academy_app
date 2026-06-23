@@ -233,6 +233,7 @@ function BestSellerCard({ item }: { item: typeof MOCK_BEST_SELLERS[0] }) {
 //               bold title, price, 2 buttons
 // ─────────────────────────────────────────────────────────────────────────────
 function ComboCard({ item }: { item: typeof MOCK_COMBO_COURSES[0] }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   if (item.openCard) {
     return (
       <View style={s.comboCard}>
@@ -268,7 +269,12 @@ function ComboCard({ item }: { item: typeof MOCK_COMBO_COURSES[0] }) {
       <Image source={item.localImage} style={s.comboImg} resizeMode="cover" />
       <View style={s.comboTopRow}>
         <Text style={s.comboOfferTxt}>Combo Offer</Text>
-        <Text style={s.bookmarkIcon}>🔖</Text>
+        <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+          <Image
+            source={require('../../../assets/images/Component15.png')}
+            style={[s.bookmarkIcon, isBookmarked && { tintColor: Colors.primary }]}
+          />
+        </TouchableOpacity>
       </View>
       <Text style={s.comboTitle} numberOfLines={1} ellipsizeMode="tail">
         {item.title}
@@ -490,7 +496,11 @@ marginRight: 6,
     paddingHorizontal: 12, paddingTop: 10, paddingBottom: 2,
   },
   comboOfferTxt: { fontSize: 11, color: Colors.crimson, fontWeight: '600' },
-  bookmarkIcon:  { fontSize: 16 },
+  bookmarkIcon: {
+  width: 20,
+  height: 20,
+  resizeMode: 'contain',
+},
   comboTitle: {
     fontSize: 15, fontWeight: '800', color: Colors.textDark,
     paddingHorizontal: 12, marginBottom: 2, lineHeight: 20,

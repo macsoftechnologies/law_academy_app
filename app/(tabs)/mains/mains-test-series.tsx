@@ -1,12 +1,13 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '../../../constants/colors';
@@ -48,10 +49,11 @@ function SubjectCard({ subject }: { subject: typeof SUBJECTS[0] }) {
     <View style={s.card}>
       {/* Blurred background */}
       <View style={s.blurredBg}>
-        <Text style={s.blurredText} numberOfLines={6}>
-          {DATA}
-        </Text>
-      </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+</View>
 
       {/* Info Section */}
       <View style={s.infoRow}>
@@ -85,8 +87,6 @@ function SubjectCard({ subject }: { subject: typeof SUBJECTS[0] }) {
   );
 }
 
-const DATA =
-  '(b) The "participatory model" which emphasizes a constructive participation of the community in the mainstreaming of the strong premises and the mainstreaming of legal information in their lives.\n\nPrinciple under the Juvenile Justice (Care and Protection of Children) Act 2015:\nThe Act has dedicated one chapter to Principles, thus emphasizing the significance of reading the Act in light of the principles while implementing the same.\n\n1 Principles of presumption of innocence:\nAny child shall be presumed to be an innocent of any man-like or criminal actions up to the age of eighteen years. The three principles of criminal jurisprudence in India are—\n\na) The same law differently as the presumption to prove by case beyond reasonable doubt and it cannot derive any benefit from testimony or failure of the release whereas while growing in years.\nb) That a criminal act the accused must be presumed to be innocent unless he is proved to be guilty; and\nc) That the onus of the prosecution shifts.\n\nArticle 11 of the Universal Declaration of Human Rights (UNDHR) states, "Everyone charged with a penal offence has the right to be presumed innocent until proved guilty according to law in a public trial at which he has had all the guarantees necessary for his defence."';
 
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: C.screenBg },
@@ -124,17 +124,15 @@ const s = StyleSheet.create({
   },
 
   blurredBg: {
-    height: 140,
-    overflow: 'hidden',
-    padding: 10,
-    backgroundColor: '#f9f9f9',
-    opacity: 0.7,
-  },
-  blurredText: {
-    fontSize: 10,
-    color: '#555',
-    lineHeight: 14,
-  },
+  height: 180,
+  overflow: 'hidden',
+},
+
+previewImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
 
   infoRow: {
     paddingHorizontal: 14,

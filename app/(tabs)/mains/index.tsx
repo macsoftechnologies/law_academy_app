@@ -1,7 +1,8 @@
 
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -15,23 +16,27 @@ import { MAINS_CARDS, MainsCard } from '../../../data/mock/mains.mock';
 
 const C = Colors;
 
-const PREVIEW =
-  `(a) The "participatory model" which emphasises a transformative governance of the community is the mainstream of the strong juvenile and the maximisation of legal intervention in their lives.\n\nPrinciples under the Juvenile Justice (Care and Protection of Children) Act 2015\nThe JJ Act has dedicated our chapter to Principles, thus emphasising the importance of making the Act in the light of the principal while implementing the same.\n\n1 Principle of presumption of Innocence:\nEvery child shall be presumed to be an innocent of any malfeasance or misconduct, upto an age of eighteen years. The three principles of criminal responsibilisation as inclusive are:\n(a) That a child shall be allowed the prosecution to prove its case beyond reasonable doubt and it cannot derive any benefit from weakness or failure of the defence without affirmative proving the case.\n(b) That the onus of the prosecution apply.\n\nArticle 11 of the Principles of criminal responsibility is about ₹90,000 times: "Everyone charged with a penal offence has the right to be presumed innocent until proved guilty according to law in a public trial at which he has had all the guarantees necessary for his defence.\n\n2 Principle of dignity and worth: All human beings shall be treated with equal dignity and rights.`;
 
 // ─────────────────────────────────
 // CARD: explore-only
 // preview text | title + 🔖 | Explore more btn
 // ─────────────────────────────────
 function ExploreCard({ item }: { item: MainsCard }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   return (
     <View style={s.card}>
       <View style={s.preview}>
-        <Text style={s.previewTxt} numberOfLines={9}>{PREVIEW}</Text>
-      </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+</View>
       <View style={s.body}>
         <View style={s.titleRow}>
           <Text style={s.title}>{item.title}</Text>
-          <Text style={s.bookmark}>🔖</Text>
+          <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+            <Image source={require('../../../assets/images/Component15.png')} style={[s.bookmarkIcon, isBookmarked && { tintColor: C.primary }]} />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
           style={s.btnPrimary}
@@ -49,11 +54,15 @@ function ExploreCard({ item }: { item: MainsCard }) {
 // preview text | title + "Add to cart" top-right + 🔖 | price | [Explore More | Buy Now]
 // ─────────────────────────────────
 function BuyCard({ item }: { item: MainsCard }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   return (
     <View style={s.card}>
       <View style={s.preview}>
-        <Text style={s.previewTxt} numberOfLines={9}>{PREVIEW}</Text>
-      </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+</View>
       <View style={s.body}>
         {/* Title row with Add to cart badge top-right */}
         <View style={s.buyTitleRow}>
@@ -91,25 +100,34 @@ function BuyCard({ item }: { item: MainsCard }) {
 // preview text + tags top-right | large title | subtitle | Open btn
 // ─────────────────────────────────
 function OpenCard({ item }: { item: MainsCard }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   return (
     <View style={s.card}>
       {/* Preview with tags floating top-right */}
       <View style={s.preview}>
-        <Text style={s.previewTxt} numberOfLines={9}>{PREVIEW}</Text>
-        {item.tags && (
-          <View style={s.tagsTopRight}>
-            {item.tags.map((t, i) => (
-              <View key={i} style={[s.tag, { backgroundColor: t.bg }]}>
-                <Text style={[s.tagTxt, { color: t.color }]}>{t.label}</Text>
-              </View>
-            ))}
-          </View>
-        )}
-      </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+
+  {item.tags && (
+    <View style={s.tagsTopRight}>
+      {item.tags.map((t, i) => (
+        <View key={`${t.label}-${i}`} style={[s.tag, { backgroundColor: t.bg }]}>
+          <Text style={[s.tagTxt, { color: t.color }]}>
+            {t.label}
+          </Text>
+        </View>
+      ))}
+    </View>
+  )}
+</View>
       <View style={s.body}>
         <View style={s.titleRow}>
           <Text style={[s.title, s.titleLarge]}>{item.title}</Text>
-          <Text style={s.bookmark}>🔖</Text>
+          <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+            <Image source={require('../../../assets/images/Component15.png')} style={[s.bookmarkIcon, isBookmarked && { tintColor: C.primary }]} />
+          </TouchableOpacity>
         </View>
         {item.subtitle && <Text style={s.subtitle}>{item.subtitle}</Text>}
         <TouchableOpacity
@@ -169,12 +187,18 @@ const s = StyleSheet.create({
   },
 
   // ── Preview area
-  preview: {
-    padding: 12, maxHeight: 160, overflow: 'hidden',
-    borderBottomWidth: 1, borderBottomColor: C.border,
-    position: 'relative',
-  },
-  previewTxt: { fontSize: 11, color: C.textMuted, lineHeight: 17 },
+preview: {
+  height: 180,
+  borderBottomWidth: 1,
+  borderBottomColor: C.border,
+  position: 'relative',
+  overflow: 'hidden',
+},
+previewImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
 
   // Tags top-right in preview (open cards)
   tagsTopRight: {
@@ -202,6 +226,7 @@ const s = StyleSheet.create({
   },
   titleLarge: { fontSize: 20, lineHeight: 28 },
   bookmark:   { fontSize: 20 },
+  bookmarkIcon: { width: 20, height: 20, resizeMode: 'contain' },
   subtitle:   { fontSize: 12, color: C.textMuted, marginTop: 2 },
 
   // Add to cart badge (buy cards, top-right)

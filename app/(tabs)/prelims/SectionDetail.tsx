@@ -3,21 +3,20 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '../../../constants/colors';
 
 const C = Colors;
 
-const PREVIEW =
-  `(a) The "participatory model" which emphasises a transformative governance of the community is the mainstream of the strong juvenile and the maximisation of legal intervention in their lives.\n\nPrinciples under the Juvenile Justice (Care and Protection of Children) Act 2015\nThe JJ Act has dedicated our chapter to Principles, thus emphasising the importance of making the Act in the light of the principal while implementing the same.\n\n1 Principle of presumption of Innocence:\nEvery child shall be presumed to be an innocent of any malfeasance or misconduct, upto an age of eighteen years. The three principles of criminal responsibilisation as inclusive are:\n(a) That a child shall be allowed the prosecution to prove its case beyond reasonable doubt and it cannot derive any benefit from weakness or failure of the defence without affirmative proving the case.\n(b) That the onus of the prosecution apply.\n(c) That the concept of the criminal responsibility is never provided to guilty, and\n(d) That the onus of the prosecution apply.\n\n2 Principle of dignity and worth: All human beings shall be treated with equal dignity and rights.`;
 
 export interface SectionItem {
   id: string;
@@ -67,8 +66,11 @@ export default function SectionDetail({ title, items }: Props) {
           <View key={item.id} style={s.card}>
             {/* Preview watermark */}
             <View style={s.preview}>
-              <Text style={s.previewTxt} numberOfLines={9}>{PREVIEW}</Text>
-            </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+</View>
 
             {/* Card body */}
             <View style={s.body}>
@@ -136,11 +138,18 @@ const s = StyleSheet.create({
   },
 
   // Preview area
-  preview: {
-    padding: 12, maxHeight: 160, overflow: 'hidden',
-    borderBottomWidth: 1, borderBottomColor: C.border,
-  },
-  previewTxt: { fontSize: 11, color: C.textMuted, lineHeight: 17 },
+preview: {
+  height: 180,
+  overflow: 'hidden',
+  borderBottomWidth: 1,
+  borderBottomColor: C.border,
+},
+
+previewImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
 
   // Body
   body: { padding: 14 },

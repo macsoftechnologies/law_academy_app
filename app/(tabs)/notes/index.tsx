@@ -1,37 +1,46 @@
 // app/(tabs)/notes/index.tsx
-import React from 'react';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet,
-  TouchableOpacity, StatusBar, ScrollView,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import Colors from '../../../constants/colors';
 import { NOTES_LIST, NoteCard } from '../../../data/mock/notes.mock';
 
 const C = Colors;
 
-const PREVIEW =
-  `(a) The "participatory model" which emphasises a transformative governance of the community is the mainstream of the strong juvenile and the maximisation of legal intervention in their lives.\n\nPrinciples under the Juvenile Justice (Care and Protection of Children) Act 2015\nThe JJ Act has dedicated our chapter to Principles, thus emphasising the importance of making the Act in the light of the principal while implementing the same.\n\n1 Principle of presumption of Innocence:\nEvery child shall be presumed to be an innocent of any malfeasance or misconduct, upto an age of eighteen years. The three principles of criminal responsibilisation as inclusive are:`;
 
 // ─────────────────────────────────────
 // Card type: explore-only  (AP JCJ Notes)
 // Layout: preview | title+price+bookmark | Explore more btn
 // ─────────────────────────────────────
 function ExploreCard({ item }: { item: NoteCard }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   return (
     <View style={s.card}>
       {/* Preview text */}
       <View style={s.preview}>
-        <Text style={s.previewTxt} numberOfLines={7}>{PREVIEW}</Text>
-      </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+</View>
 
       {/* Body */}
       <View style={s.body}>
         {/* Title row */}
         <View style={s.titleRow}>
           <Text style={s.title}>{item.title}</Text>
-          <Text style={s.bookmark}>🔖</Text>
+          <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+            <Image source={require('../../../assets/images/Component15.png')} style={[s.bookmarkIcon, isBookmarked && { tintColor: C.primary }]} />
+          </TouchableOpacity>
         </View>
         <Text style={s.price}>{item.price}</Text>
 
@@ -52,6 +61,7 @@ function ExploreCard({ item }: { item: NoteCard }) {
 // Layout: preview (+optional Printed Notes badge) | title+price+bookmark | [Explore More | Add to cart] | Buy Now
 // ─────────────────────────────────────
 function BuyCard({ item }: { item: NoteCard }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const isPrinted = item.type === 'buy-printed';
 
   // Clicking ANY button on a printed card → printed-notes index
@@ -67,22 +77,28 @@ function BuyCard({ item }: { item: NoteCard }) {
     <View style={s.card}>
       {/* Preview text + optional Printed Notes badge bottom-right */}
       <View style={s.preview}>
-        <Text style={s.previewTxt} numberOfLines={7}>{PREVIEW}</Text>
-        {isPrinted && (
-          <TouchableOpacity
-            style={s.printedBadge}
-            onPress={() => router.push('/notes/printed-notes' as any)}
-          >
-            <Text style={s.printedBadgeTxt}>Printed Notes</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
+
+  {isPrinted && (
+    <TouchableOpacity
+      style={s.printedBadge}
+      onPress={() => router.push('/notes/printed-notes' as any)}
+    >
+      <Text style={s.printedBadgeTxt}>Printed Notes</Text>
+    </TouchableOpacity>
+  )}
+</View>
 
       {/* Body */}
       <View style={s.body}>
         <View style={s.titleRow}>
           <Text style={s.title}>{item.title}</Text>
-          <Text style={s.bookmark}>🔖</Text>
+          <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+            <Image source={require('../../../assets/images/Component15.png')} style={[s.bookmarkIcon, isBookmarked && { tintColor: C.primary }]} />
+          </TouchableOpacity>
         </View>
         <Text style={s.price}>{item.price}</Text>
 
@@ -110,42 +126,51 @@ function BuyCard({ item }: { item: NoteCard }) {
 // Layout: preview+tags-top-right | big title | subtitle | Open btn
 // ─────────────────────────────────────
 function OpenCard({ item }: { item: NoteCard }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const isPrinted = item.type === 'open-printed';
 
   return (
     <View style={s.card}>
       {/* Preview text — tags float top-right inside preview */}
       <View style={s.preview}>
-        <Text style={s.previewTxt} numberOfLines={7}>{PREVIEW}</Text>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={s.previewImage}
+  />
 
-        {/* Tags: top-right corner of preview */}
-        {item.tags && item.tags.length > 0 && (
-          <View style={s.tagsTopRight}>
-            {item.tags.map((t, i) => (
-              <View key={i} style={[s.tag, { backgroundColor: t.bg }]}>
-                <Text style={[s.tagTxt, { color: t.color }]}>{t.label}</Text>
-              </View>
-            ))}
-          </View>
-        )}
+  {item.tags && item.tags.length > 0 && (
+    <View style={s.tagsTopRight}>
+      {item.tags.map((t, i) => (
+        <View
+          key={`${t.label}-${i}`}
+          style={[s.tag, { backgroundColor: t.bg }]}
+        >
+          <Text style={[s.tagTxt, { color: t.color }]}>
+            {t.label}
+          </Text>
+        </View>
+      ))}
+    </View>
+  )}
 
-        {/* Printed Notes badge — bottom-right of preview */}
-        {isPrinted && (
-          <TouchableOpacity
-            style={s.printedBadge}
-            onPress={() => router.push('/notes/printed-notes' as any)}
-          >
-            <Text style={s.printedBadgeTxt}>Printed Notes</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+  {isPrinted && (
+    <TouchableOpacity
+      style={s.printedBadge}
+      onPress={() => router.push('/notes/printed-notes' as any)}
+    >
+      <Text style={s.printedBadgeTxt}>Printed Notes</Text>
+    </TouchableOpacity>
+  )}
+</View>
 
       {/* Body */}
       <View style={s.body}>
         {/* Large bold title */}
         <View style={s.titleRow}>
           <Text style={[s.title, s.titleLarge]}>{item.title}</Text>
-          <Text style={s.bookmark}>🔖</Text>
+          <TouchableOpacity onPress={() => setIsBookmarked(!isBookmarked)}>
+            <Image source={require('../../../assets/images/Component15.png')} style={[s.bookmarkIcon, isBookmarked && { tintColor: C.primary }]} />
+          </TouchableOpacity>
         </View>
 
         {/* Subtitle below title */}
@@ -219,12 +244,19 @@ const s = StyleSheet.create({
   },
 
   // ── Preview area (top section of card)
-  preview: {
-    height: 130, overflow: 'hidden',
-    padding: 12, position: 'relative',
-    borderBottomWidth: 1, borderBottomColor: C.border,
-  },
-  previewTxt: { fontSize: 11, color: C.textMuted, lineHeight: 17 },
+ preview: {
+  height: 180,
+  overflow: 'hidden',
+  position: 'relative',
+  borderBottomWidth: 1,
+  borderBottomColor: C.border,
+},
+
+previewImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
 
   // Tags — absolute top-right inside preview
   tagsTopRight: {
@@ -256,6 +288,7 @@ const s = StyleSheet.create({
   },
   titleLarge: { fontSize: 20, lineHeight: 26, marginBottom: 2 },
   bookmark:   { fontSize: 20 },
+  bookmarkIcon: { width: 20, height: 20, resizeMode: 'contain' },
 
   price:    { fontSize: 16, fontWeight: '800', color: C.textDark, marginBottom: 12 },
   subtitle: { fontSize: 12, color: C.textMuted, marginTop: 2 },

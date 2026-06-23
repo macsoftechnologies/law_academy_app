@@ -2,6 +2,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
+  Image,
   Modal, Pressable,
   ScrollView,
   StatusBar,
@@ -17,12 +18,15 @@ import { NOTE_SUBJECT_ITEMS } from '../../../data/mock/notes.mock';
 const C = Colors;
 const DETAIL_ROUTE = '/notes/detail';
 
-const PREVIEW_TEXT =
-  `(a) The "participatory model" which emphasises a transformative governance of the community is the mainstream of the strong juvenile and the maximisation of legal intervention in their lives.\n\nPrinciples under the Juvenile Justice (Care and Protection of Children) Act 2015\nThe JJ Act has dedicated our chapter to Principles, thus emphasising the importance of making the Act in the light of the principal while implementing the same.`;
 
 export default function NoteSubjectItemsScreen() {
   const { categoryTitle } = useLocalSearchParams<{ categoryTitle: string }>();
   const [popupVisible, setPopupVisible] = useState(false);
+  const [bookmarkedIds, setBookmarkedIds] = useState<Record<string, boolean>>({});
+
+  const toggleBookmark = (id: string) => {
+    setBookmarkedIds(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const handleBuyNow = () => {
     setPopupVisible(false);
@@ -55,16 +59,21 @@ export default function NoteSubjectItemsScreen() {
             onPress={() => item.locked && setPopupVisible(true)}
           >
             {/* Blurred preview */}
-            <View style={s.previewWrap}>
-              <Text style={[s.previewTxt, item.locked && s.blurred]} numberOfLines={5}>
-                {PREVIEW_TEXT}
-              </Text>
-              {item.locked && (
-                <View style={s.lockOverlay}>
-                  <Text style={s.lockEmoji}>🔒</Text>
-                </View>
-              )}
-            </View>
+           <View style={s.previewWrap}>
+  <Image
+    source={require('../../../assets/images/cat_ddj.png')}
+    style={[
+      s.previewImage,
+      item.locked && { opacity: 0.2 }
+    ]}
+  />
+
+  {item.locked && (
+    <View style={s.lockOverlay}>
+      <Text style={s.lockEmoji}>🔒</Text>
+    </View>
+  )}
+</View>
 
             {/* Footer */}
             <View style={s.cardFooter}>
@@ -79,7 +88,9 @@ export default function NoteSubjectItemsScreen() {
                   </View>
                 </View>
               </View>
-              <Text style={s.bookmarkIcon}>🔖</Text>
+              <TouchableOpacity onPress={() => toggleBookmark(item.id)}>
+                <Image source={require('../../../assets/images/Component15.png')} style={[s.bookmarkIcon, bookmarkedIds[item.id] && { tintColor: C.primary }]} />
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         ))}
@@ -148,9 +159,17 @@ const s = StyleSheet.create({
     shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 }, elevation: 2,
   },
-  previewWrap: { height: 90, overflow: 'hidden', position: 'relative' },
-  previewTxt:  { fontSize: 11, color: C.textMuted, padding: 12, lineHeight: 17 },
-  blurred:     { opacity: 0.12 },
+previewWrap: {
+  height: 180,
+  overflow: 'hidden',
+  position: 'relative',
+},
+
+previewImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
   lockOverlay: {
     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
     alignItems: 'center', justifyContent: 'center',
@@ -170,7 +189,7 @@ const s = StyleSheet.create({
   tagOrangeTxt: { fontSize: 11, color: '#E65100', fontWeight: '600' },
   tagBlue:    { backgroundColor: '#E3F2FD', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
   tagBlueTxt: { fontSize: 11, color: '#1565C0', fontWeight: '600' },
-  bookmarkIcon: { fontSize: 20, marginLeft: 8 },
+  bookmarkIcon: { width: 20, height: 20, resizeMode: 'contain', marginLeft: 8 },
 
   // Popup
   backdrop:    { flex: 1, backgroundColor: C.overlay, justifyContent: 'flex-end' },

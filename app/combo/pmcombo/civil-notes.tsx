@@ -2,11 +2,12 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
+  Image,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ScreenWrapper from '../../../components/ScreenWrapper';
@@ -92,7 +93,10 @@ export default function PmComboCivilNotesScreen() {
                   </View>
                 </View>
 
-                <Text style={s.bookmarkIcon}>🔖</Text>
+                <Image
+  source={require('../../../assets/images/Component15.png')}
+  style={s.bookmarkIcon}
+/>
                 
               </View>
             </TouchableOpacity>
@@ -231,7 +235,9 @@ const s = StyleSheet.create({
   },
 
   bookmarkIcon: {
-    fontSize: 20,
-    marginLeft: 8,
-  },
+  width: 24,
+  height: 24,
+  marginLeft: 8,
+  resizeMode: 'contain',
+},
 });
